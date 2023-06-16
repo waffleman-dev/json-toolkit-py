@@ -1,5 +1,4 @@
 import json
-import re
 
 def serialize(file_path):
     with open(file_path, 'r') as f:
@@ -16,7 +15,26 @@ def strip_by_keys(data, keys):
     else:
         return data
 
+def get_nodes(data, keyValuePairs):
+    def match_key_value(node, key, value):
+        if isinstance(node, dict):
+            if key in node and node[key] == value:
+                return True
+        return False
 
+    def traverse(node):
+        matches = []
+        if isinstance(node, dict):
+            if any(match_key_value(node, k, v) for k, v in keyValuePairs):
+                matches.append(node)
+            for value in node.values():
+                if isinstance(value, (dict, list)):
+                    matches.extend(traverse(value))
+        elif isinstance(node, list):
+            for item in node:
+                if isinstance(item, (dict, list)):
+                    matches.extend(traverse(item))
+        return matches
 
-
-
+    result = traverse(data)
+    return result

@@ -1,2 +1,2 @@
 # json-toolkit-py
-A tool to perform some common tasks I encounter daily
+A library to perform some simple operations on json data.
